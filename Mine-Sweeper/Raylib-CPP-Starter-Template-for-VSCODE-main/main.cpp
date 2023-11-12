@@ -3,6 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <random>
+#include <deque>
 
 const int screenWidth = 400;
 const int screenHeight = 500;
@@ -104,6 +105,7 @@ void RevealCell(int x, int y) {
     }
 }
 
+
 int main() {
     InitWindow(screenWidth, screenHeight, "Minesweeper");
     SetTargetFPS(60);
@@ -116,20 +118,23 @@ int main() {
         ClearBackground(RAYWHITE);
 
         DrawBoard();
-
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            int x = GetMouseX() / cellSize;
-            int y = GetMouseY() / cellSize;
-            if (board[y][x].mine) {
-                RevealCell(x, y);
-                gameOver = true;
-            } else {
-                RevealCell(x, y);
-                if (cellsRevealed == totalNumberCells) {
-                    gameWon = true;
+        if(!gameOver)
+        {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                int x = GetMouseX() / cellSize;
+                int y = GetMouseY() / cellSize;
+                if (board[y][x].mine) {
+                    RevealCell(x, y);
+                    gameOver = true;
+                } else {
+                    RevealCell(x, y);
+                    if (cellsRevealed == totalNumberCells) {
+                        gameWon = true;
+                    }
                 }
             }
         }
+        
         if(gameOver)
         {
             DrawText("GAME OVER", GetScreenWidth()/2, GetScreenHeight() - 70, 30, BLACK);
